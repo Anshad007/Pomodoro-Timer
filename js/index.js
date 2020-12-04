@@ -1,61 +1,80 @@
-//variables for timer functionality
-let hrs = document.getElementById("hrs");
+//variables for timer functionality*******************************
 let mins = document.getElementById("mins");
 let secs = document.getElementById("secs");
-let hrs_val, mins_val, secs_val;
+//set timer values here
+let mins_val, secs_val;
 let btn = document.querySelector("button");
 var interID;
+//audio for when time's up
+let beep = document.querySelector("audio");
 
-//Variables for task list functionality
-let taskEnteringArea = document.getElementById('task');
-let taskList = document.getElementById('taskList');
+//Variables for task list functionality*******************************************
+let taskEnteringArea = document.getElementById("taskEnteringArea");
+let taskList = document.getElementById("taskList");
 let addTaskBtn = document.getElementById("addTaskBtn");
-
-addTaskBtn.onclick = function(){
-  let task = document.createElement('li');
-  
-  let text = taskEnteringArea.value;
-  taskList.appendChild(task);
-}
+taskEnteringArea.value = "";
 
 // Timer funcitonality *******************************************************************
 function stopTimer() {
   window.clearInterval(interID);
   btn.innerHTML = "START";
   btn.onclick = startTimer;
-  alert("Timer stopped");
 }
 
 function countdown() {
   if (secs_val == 0) {
     if (mins_val == 0) {
-      if (hrs_val == 0) {
-        stopTimer();
-      } else {
-        hrs_val--;
-        hrs.value = hrs_val;
-      }
-
-      mins_val = 59;
+      stopTimer();
+      beep.play();
+      return;
     } else {
       mins_val--;
     }
-    mins.value = mins_val;
+    mins.innerHTML = mins_val;
 
     secs_val = 59;
   } else {
     secs_val--;
   }
-  secs.value = secs_val;
+  secs.innerHTML = secs_val;
 }
 
 function startTimer(evt) {
-  secs_val = Number(secs.value);
-  mins_val = Number(mins.value);
-  hrs_val = Number(hrs.value);
+  secs_val = Number(secs.innerHTML);
+  mins_val = Number(mins.innerHTML);
   evt.target.onclick = stopTimer;
   evt.target.innerHTML = "STOP";
   interID = window.setInterval(countdown, 1000);
 }
-
 btn.onclick = startTimer;
+
+// Task adding functionality*********************************************************
+addTaskBtn.onclick = function () {
+  let task = taskEnteringArea.value.trim();
+
+  if (task == "") {
+    return;
+  }
+  let taskTxtNode = document.createTextNode(task);
+  let taskEle = document.createElement("li");
+  let chkBtn = document.createElement("button");
+  chkBtn.innerHTML = "Check";
+
+  chkBtn.onclick = function () {
+    taskEle.style.textDecoration = "line-through";
+  };
+
+  let delBtn = document.createElement("button");
+  delBtn.innerHTML = "Delete";
+
+  delBtn.onclick = function () {
+    taskEle.remove();
+  };
+
+  taskEle.appendChild(chkBtn);
+  taskEle.appendChild(taskTxtNode);
+  taskEle.appendChild(delBtn);
+
+  taskList.appendChild(taskEle);
+  taskEnteringArea.value = "";
+};
