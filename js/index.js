@@ -1,10 +1,12 @@
 //variables for timer functionality*******************************
 let mins = document.getElementById("mins");
 let secs = document.getElementById("secs");
+
 //set timer values here
 let mins_val, secs_val;
-let btn = document.querySelector("button");
+let timerControl = document.getElementById("timerControl");
 var interID;
+
 //audio for when time's up
 let beep = document.querySelector("audio");
 
@@ -14,11 +16,28 @@ let taskList = document.getElementById("taskList");
 let addTaskBtn = document.getElementById("addTaskBtn");
 taskEnteringArea.value = "";
 
+//Shift between timer types
+let switchToPomoBtn = document.getElementById("switchToPomoBtn");
+let switchToShortBtn = document.getElementById("switchToShortBtn");
+let switchToLongBtn = document.getElementById("switchToLongBtn");
+
+switchToPomoBtn.onclick = function () {
+  mins.innerHTML = 25;
+};
+
+switchToShortBtn.onclick = function () {
+  mins.innerHTML = "05";
+};
+
+switchToLongBtn.onclick = function () {
+  mins.innerHTML = 15;
+};
+
 // Timer funcitonality *******************************************************************
 function stopTimer() {
   window.clearInterval(interID);
-  btn.innerHTML = "START";
-  btn.onclick = startTimer;
+  timerControl.innerHTML = "START";
+  timerControl.onclick = startTimer;
 }
 
 function countdown() {
@@ -46,7 +65,7 @@ function startTimer(evt) {
   evt.target.innerHTML = "STOP";
   interID = window.setInterval(countdown, 1000);
 }
-btn.onclick = startTimer;
+timerControl.onclick = startTimer;
 
 // Task adding functionality*********************************************************
 addTaskBtn.onclick = function () {
